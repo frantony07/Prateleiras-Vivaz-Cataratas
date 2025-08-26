@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 class objeto:   
     idsUsados=[]
     nomesUsados=[]
@@ -63,7 +63,7 @@ class objeto:
         objeto.ModificarMesSiAnoForBisiestro(ano,mes)
         dia=objeto.validarDia(mes,ano)
         validadeStr=(f'{dia}/{mes}/{ano}')
-        validade=datetime.strptime(validadeStr,"%d/%m/%y")
+        validade=datetime.strptime (validadeStr,"%d/%m/%Y")
         return validade
 
     diasMes=[
@@ -143,9 +143,16 @@ class prateleira:
         self.reparticao3=reparticao.criarReparticao()
         self.reparticao4=reparticao.criarReparticao()
         self.reparticao5=reparticao.criarReparticao()
+        self.repartiçao=[
+            self.reparticao1,
+            self.reparticao2,
+            self.reparticao3,
+            self.reparticao4,
+            self.reparticao5
+        ]
 
     def criarPrateleira(self):
-        novaPrateleira=(self.reparticao1,self.reparticao2,self.reparticao3,self.reparticao4,self.reparticao5)
+        novaPrateleira=self.repartiçao
         return novaPrateleira
     
 

@@ -2,6 +2,8 @@ from prateleiras import prateleira
 from prateleiras import objeto
 import os
 import platform 
+import datetime
+
 def limparTela():
     os.system("pause")
     sistema=platform.system()
@@ -11,6 +13,10 @@ def limparTela():
         os.system("clear")
 
 P1=prateleira()
+P2=prateleira()
+P3=prateleira()
+P4=prateleira()
+P5=prateleira()
 
 almoxarifado=[
     P1.criarPrateleira(),
@@ -53,16 +59,15 @@ def produtoComStockBaixo():
     if not encontrado:
         print("nenhum produto com stock baixo\n")
 
-#falta encontrar la forma de hacer un input de la validade para conseguir comparar com las de los produtos, tu puedes frantony:)
 def produtosProximos_a_Vencer():
-    vencimentoCurto=objetos.criarvalidade()
+    vencimentoCurto=objeto.criarvalidade()
     encontrado=False
     print("Produtos proximos a vencer\n")
     for i in range(len(almoxarifado)):
         for j in range(len(almoxarifado[i])):
             for itens in almoxarifado[i][j].itensNaReparticao:
                 if itens.validade==vencimentoCurto:
-                    print( almoxarifado[i][j].itensNaReparticao,f"na prateleira{i} repartição{j}")
+                    print( almoxarifado[i][j].itensNaReparticao,f"da prateleira{i} na repartição{j}")
                     encontrado=True
     if not encontrado:
         print("nenhum produto proximo a vencer encontrado\n")
