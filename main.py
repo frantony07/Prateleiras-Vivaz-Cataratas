@@ -1,9 +1,12 @@
 from prateleiras import prateleira
-from prateleiras import objeto
+from prateleiras import iten
 import os
 import platform 
 import datetime
+from dateutil.relativedelta import relativedelta
 
+quantidadeDePrateleiras=5
+#faz com que o for principal seja uma funcao para não repetir tanto codigo y faz com que isso fique limpo ao olho dos futuros desenvolvedores 
 def limparTela():
     os.system("pause")
     sistema=platform.system()
@@ -12,39 +15,43 @@ def limparTela():
     else:
         os.system("clear")
 
-P1=prateleira()
-P2=prateleira()
-P3=prateleira()
-P4=prateleira()
-P5=prateleira()
 
-almoxarifado=[
-    P1.criarPrateleira(),
-    P1.criarPrateleira(),
-    P1.criarPrateleira(),
-    P1.criarPrateleira(),
-    P1.criarPrateleira()
-]
+almoxarifado= [prateleira() for _ in range(quantidadeDePrateleiras)]
 
 def buscarProdutos():
     produtoBuscado=input("digita o produto que deseja procurar\n")
     realizarBusqueda(produtoBuscado)
 
-def realizarBusqueda(produto):
-    for i in range(len(almoxarifado)):                
-        for j in range(len(almoxarifado[i])):         
-            if produto in almoxarifado[i][j].itensNaReparticao :
-                print(f"Produto {produto} achado na prateleira {i+1} na repartiçao {j+1}\n")
-                return True
-
-    print("produto nao achado\n")
+def realizarBusqueda(produtoBuscado):
+    for i , prateleira in enumerate(almoxarifado):                
+        for j , reparticoes in enumerate(prateleira.reparticoes):    
+            for n , itens in enumerate(reparticoes.itensNaReparticao):
+                if produtoBuscado in itens.nome :
+                    return print(f"Produto {produtoBuscado} achado na prateleira {i+1} na repartiçao {j+1}")
+    return print("produto nao achado\n")
 
 def adicionarProduto():
-    itens=objeto.criarProduto()
-    prateleira=int(input("digite a prateleira na que deseja adicionar o produto\n"))-1
-    repartiçao=int(input("digite a reparticao que deseja adicionar o produto\n"))-1
-    almoxarifado[prateleira][repartiçao].append(itens)
+    itens=iten.criarProduto()
+    prateleira=selecionarAprateleira()
+    repartiçao=selecionarAreparticao()
+    almoxarifado[prateleira].reparticoes[repartiçao].itensNaReparticao.append(itens)
     print("produto cadastrado com sucesso!\n")
+
+def selecionarAreparticao():
+    while True:
+        repartiçao=int(input("digite a reparticao que deseja adicionar o produto\n"))-1
+        if repartiçao <=5:
+             break
+        else:
+            print("opcao invalida tente novamente ") 
+    return repartiçao
+
+def selecionarAprateleira():
+    while True:
+        prateleira=int(input("digite a prateleira na que deseja adicionar o produto\n"))-1
+        if prateleira<=len(almoxarifado):
+            break
+    return prateleira
 
 def produtoComStockBaixo():
     encontrado=False
@@ -60,21 +67,19 @@ def produtoComStockBaixo():
         print("nenhum produto com stock baixo\n")
 
 def produtosProximos_a_Vencer():
-    vencimentoCurto=objeto.criarvalidade()
+    agora=datetime.now()
+    vencimentoCurto=agora + relativedelta(month=3)
     encontrado=False
     print("Produtos proximos a vencer\n")
-    for i in range(len(almoxarifado)):
-        for j in range(len(almoxarifado[i])):
-            for itens in almoxarifado[i][j].itensNaReparticao:
-                if itens.validade==vencimentoCurto:
-                    print( almoxarifado[i][j].itensNaReparticao,f"da prateleira{i} na repartição{j}")
-                    encontrado=True
+    for i, prateleira in enumerate(almoxarifado):
+        for j, reparticao in enumerate(prateleira.reparticoes):
+            for item in reparticao.itensNaReparticao:
+                if item.validade <= vencimentoCurto:
+                    print(f"{item.nome} da prateleira {i} na repartição {j} vai vencer em {item.validade.date()}")
+                    encontrado = True
     if not encontrado:
         print("nenhum produto proximo a vencer encontrado\n")
 
-
-
-        
 
 def main():
     while True:
@@ -90,11 +95,10 @@ def main():
         match opcao:
             case 1: buscarProdutos()
             case 2: adicionarProduto()
-            case 3: produtosProximos_a_Vencer
+            case 3: produtosProximos_a_Vencer()
             case 4: produtoComStockBaixo()
         limparTela()
             
-
 
 if __name__ == "__main__":
     main()
