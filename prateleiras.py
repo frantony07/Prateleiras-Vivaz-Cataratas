@@ -15,12 +15,14 @@ class iten:
     #Este array almacena os nomes de todos os itens criados
     unidadesMedidas=["0-UND(Unidade)","1-LT(Litros)","2-KG(Kilo)","3-PC(Pacote)"]
     #este array almacena as unidades de medida 
-    def __init__(self,id,nome,stock,unidadeMedida,validade):
+    def __init__(self,id,nome,stock,unidadeMedida,validade,stockMinimo):
         self.id=int(id)
         self.nome=str(nome)
         self.stock=int(stock)
-        self.unidadeMedida=unidadeMedida
-        self.validade=validade
+        self.unidadeMedida=str(unidadeMedida)
+        self.validade=str(validade)
+        self.stockMinimo=int(stockMinimo)
+        self.stockEstaMinimo=False
     
     def criarProduto():
         id_novo = iten.criarId()
@@ -28,45 +30,66 @@ class iten:
         unidade_medida_nova = iten.criarUnidadeMedida()
         stock_novo = iten.criarStock()
         validade_nova = iten.criarvalidade()
-        produto = iten(id_novo, nome_novo, stock_novo, unidade_medida_nova, validade_nova)
+        stockMinimo_novo= iten.criarStockMinimo()
+        produto = iten(id_novo, nome_novo, stock_novo, unidade_medida_nova, validade_nova,stockMinimo_novo)
         return produto
 
     def criarId():
         while True:
-            id=int(input("digite o id do produto\n"))
-            if id in iten.idsUsados:
-                print("id invalido\n")
-            else:
-                iten.idsUsados.append(id)
-                break 
-        return id
+            try:
+                id=int(input("digite o id do produto\n"))
+                if id in iten.idsUsados:
+                    print("id invalido\n")
+                else:
+                    iten.idsUsados.append(id)
+                    return id
+            except ValueError:
+                print("valor invalido, digite um numero inteiro\n")
     
     def criarNome():
         while True:
-            nome=str(input("digite o nome do produto\n"))
-            if nome in iten.nomesUsados:
-                print("nome invalido\n")
-            else:
-                iten.nomesUsados.append(nome)
-                break
-        return nome
+            try:
+                nome=str(input("digite o nome do produto\n"))
+                if nome in iten.nomesUsados:
+                    print("nome invalido\n")
+                else:
+                    iten.nomesUsados.append(nome)
+                    return nome
+            except ValueError:
+                print("valor invalido, digite um  nome valido\n")
     
     def criarStock():
         while True:
-            stock=int(input("digite o stock\n"))
-            if stock<0:
-                print("stock invalido\n")
-            else: break
-        return stock
+            try:
+                stock=int(input("digite o stock\n"))
+                if stock<0:
+                    print("stock invalido\n")
+                else: return stock
+            except ValueError:
+                print("valor invalido, digite um numero inteiro\n")
     
     def criarUnidadeMedida():
         while True:
-            print(iten.unidadesMedidas)
-            undMedida=int(input("escolha uma das opçoes\n"))
-            if undMedida < 0 or undMedida > len(iten.unidadesMedidas):
-                print("opçao invalida\n")
-            else: break
-        return iten.unidadesMedidas[undMedida-1]
+            try:
+                print(iten.unidadesMedidas)
+                undMedida=int(input("escolha uma das opçoes\n"))
+                if undMedida < 0 or undMedida > len(iten.unidadesMedidas):
+                    print("opçao invalida\n")
+                else:
+                    return iten.unidadesMedidas[undMedida-1]
+            except ValueError:
+                print("valor invalido, digite um numero inteiro\n")
+    
+    def criarStockMinimo():
+        while True:
+            try:
+                stockMinimo=int(input("digite o stock minimo do produto\n"))
+                return stockMinimo
+            except ValueError:
+                print("valor invalido digite um numero inteiro\n")
+            
+                
+            
     
     def criarvalidade():
         ano=iten.validarAno()
@@ -77,45 +100,53 @@ class iten:
         validade=datetime.strptime(validadeStr,"%d/%m/%Y")
         return validade
 
-    diasMes=[
-        ["janeiro", 31 ],
-        ["fevereiro", 28 ],
-        ["março", 31 ],
-        ["abril", 30 ],
-        ['maio', 31 ],
-        ["junho", 30 ],
-        ['julho', 31 ],
-        ["agosto", 31 ],
-        ["setembro", 30 ],
-        ["outubro", 31 ],
-        ["novembro", 30 ],
-        ["dezembro", 31 ]
-    ]
+    diasMes={
+        1 : 31 ,
+        2 : 28 ,
+        3 : 31 ,
+        4 : 30 ,
+        5 : 31 ,
+        6 : 30 ,
+        7 : 31 ,
+        8 : 31 ,
+        9 : 30 ,
+        10 : 31 ,
+        11 : 30 ,
+        12 : 31 
+    }
     def validarAno():
-        ano=int(input('digite o ano de vencimento\n'))
-        return ano
+        try:
+            ano=int(input('digite o ano de vencimento\n'))
+            return ano
+        except ValueError:
+            print("valor invalido, digite um numero inteiro\n")
     
     def validarMes():
         while True:
-            mes=int(input('digite o mes de vencimento em numero\n'))
-            if mes>12 or mes<1:
-                print('opcao invalida\n')
-            else: break
-        return mes
+            try:
+                mes=int(input('digite o mes de vencimento em numero\n'))
+                if mes>12 or mes<1:
+                    print('opcao invalida\n')
+                else:
+                    return mes
+            except ValueError:
+                print("valor invalido, digite um numero inteiro\n")
     
     def validarDia(mes,ano):
         while True:
-            dia=int(input('digite o dia de vencimento\n'))
-            if(dia>iten.diasMes[mes-1][1]):
-                print('opçao invalida\n')
-            else:
-                break
-        return dia
+            try:
+                dia=int(input('digite o dia de vencimento\n'))
+                if(dia>iten.diasMes[mes]):
+                    print('opçao invalida\n')
+                else:
+                    return dia
+            except ValueError:
+                print("valor invalido, digite um numero inteiro")
     
     def ModificarMesSiAnoForBisiestro(ano,mes):
         anoBisiestro=iten.verificarAnoBisiestroEmesFevereiroNaoUsar(ano,mes)
         if anoBisiestro == True:
-            iten.diasMes[1][1]=29
+            iten.diasMes[2]=29
 
     def verificarAnoBisiestroEmesFevereiroNaoUsar(ano,mes):
         éBisiestro=iten.verificarAnoBisiestroNaoUsar(ano)
@@ -129,16 +160,6 @@ class iten:
             return True
         else:
             return False   
-class reparticao:
-    """
-    Esta classe e a responsavel pelo  almacenamento dos  itens 
-    """
-    def __init__(self,):
-        self.itensNaReparticao=[]
-    
-    def criarReparticao():
-        return reparticao()
-
 class prateleira:
     """
     esta classe e a responsavel da administração das repartições.
@@ -147,7 +168,7 @@ class prateleira:
 
     def __init__(self):
 
-        self.reparticoes=[reparticao.criarReparticao() for _ in range(5)]
+        self.itensNaPrateleira=[]
 
     def criarPrateleira(self):
         return self.reparticoes
