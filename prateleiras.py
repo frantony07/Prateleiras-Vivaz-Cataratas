@@ -115,11 +115,16 @@ class iten:
         12 : 31 
     }
     def validarAno():
-        try:
-            ano=int(input('digite o ano de vencimento\n'))
-            return ano
-        except ValueError:
-            print("valor invalido, digite um numero inteiro\n")
+        while True:
+            try:
+                ano=int(input('digite o ano de vencimento\n'))
+                agora=datetime.now().year
+                if ano >= agora:
+                    return ano
+                else:
+                    print("data invalida")
+            except ValueError:
+                print("valor invalido, digite um numero inteiro\n")
     
     def validarMes():
         while True:

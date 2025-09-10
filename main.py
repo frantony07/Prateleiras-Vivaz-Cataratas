@@ -115,7 +115,7 @@ def fuctionStockBaixo(itens:object, produtoBuscado:Any, booleanValue:bool, i:int
     """
     if itens.stock<= itens.stockMinimo:
         itens.stockEstaMinimo=True
-        print(f"{itens.nome}, na prateleira{i+1}")            
+        print(f"{itens.nome}, da prateleira{i+1} conta com {itens.stock} de stock")            
         booleanValue=True
         return booleanValue
     
