@@ -1,19 +1,10 @@
 from prateleiras import prateleira
 from prateleiras import iten
-import os
-import platform 
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from typing import Any , Callable
-
-def limparTela():
-    os.system("pause")
-    sistema=platform.system()
-    if sistema=="Windows":
-        os.system("cls")
-    else:
-        os.system("clear")
-
+from errorCode import MostrarErro
+from programingClean import limparTela
 
 quantidadeDePrateleiras=5
 
@@ -40,13 +31,18 @@ def loopDeBusqueda(fuction:Callable,produtoBuscado:Any,booleanValue:bool):
 def buscarProdutos():
     try:
         produtoBuscado=str(input("digita o produto que deseja procurar\n"))
+        
+    except Exception as e:
+        MostrarErro(e)
+    
+    else:
         booleanValue=False
         booleanValue = loopDeBusqueda(funçãoDeBusqueda, produtoBuscado, booleanValue)
 
         if not booleanValue:
             print("Produto não encontrado")
-    except ValueError:
-        print("valor invalido, porfavor digita uma string")
+
+        
 
 def funçãoDeBusqueda(itens:object, produtoBuscado:Any, booleanValue:bool, i:int, j:int):
     """
@@ -71,33 +67,55 @@ def funçãoDeBusqueda(itens:object, produtoBuscado:Any, booleanValue:bool, i:in
 
 def adicionarProduto():
     itens=iten.criarProduto()
-    prateleira=selecionarAprateleira()
+    prateleira=selecionarPrateleira()
     almoxarifado[prateleira].itensNaPrateleira.append(itens)
     print("produto cadastrado com sucesso!\n")
 
-def selecionarAprateleira():
+def selecionarPrateleira():
     while True:
-        prateleira=int(input("digite a prateleira na que deseja adicionar o produto\n"))-1
-        if prateleira<=len(almoxarifado):
-            break
-    return prateleira
-
+        try:
+            prateleira=int(input("digite a prateleira na que deseja adicionar o produto\n"))-1
+            if prateleira<=len(almoxarifado):
+                return prateleira
+    
+        except Exception as e:
+            MostrarErro(e)
 
 def produtosProximos_a_Vencer():
-    agora=datetime.now()
-    vencimentoCurto=agora + relativedelta(month=3)
-    booleanValue=False
-    print("Produtos proximos a vencer\n")
-    booleanValue=loopDeBusqueda(fuctionVencimento,vencimentoCurto,booleanValue)       
-    if not booleanValue:
-        print("nenhum produto proximo a vencer encontrado\n")
+    try:
+        agora=datetime.now()
+        vencimentoCurto=agora + relativedelta(month=3)
+        booleanValue=False
+        print("Produtos proximos a vencer\n")
+        booleanValue=loopDeBusqueda(fuctionVencimento,vencimentoCurto,booleanValue)       
+    except Exception as e:
+        MostrarErro(e)
+    
+    else:
+        if not booleanValue:
+            print("nenhum produto proximo a vencer encontrado\n")
 
-def fuctionVencimento(itens, produtoBuscado, booleanValue, i, j):
-     if itens.validade <= produtoBuscado:
-        print(f"{itens.nome} da prateleira {i} vai vencer em {itens.validade.date()}")
+def fuctionVencimento(itens:object, produtoBuscado:Any, booleanValue:bool, i:int, j:int):
+    """
+    esta função e responsavel por mostrar os produtos que estan com o stock baixo no sistema.
+    a função tem que ser passada como parametro na função loopDeBusqueda.
+    Args:
+        itens (object): e o objeto que esta dispovel na prateleira.
+        produtoBuscado (Any):e o produto que o usuario esta procurando.
+        booleanValue (bool):identifica se o produto foi encontrado.
+        i (int): e a prateleira.
+        Returns:
+        bool: Retorna True se encontrar o item."""
+    try:
         booleanValue = True
-        return booleanValue
+        if itens.validade <= produtoBuscado:
+            print(f"{itens.nome} da prateleira {i} vai vencer em {itens.validade.date()}")
+        
+    except Exception as e:
+        MostrarErro(e)
 
+    else:
+        return booleanValue
 
 def fuctionStockBaixo(itens:object, produtoBuscado:Any, booleanValue:bool, i:int, j:int):
     """
@@ -111,22 +129,28 @@ def fuctionStockBaixo(itens:object, produtoBuscado:Any, booleanValue:bool, i:int
         j (int): e a repartição
 
     Returns:
-        bool: Retorna True se encontrar o item. 
-    """
-    if itens.stock<= itens.stockMinimo:
-        itens.stockEstaMinimo=True
-        print(f"{itens.nome}, da prateleira{i+1} conta com {itens.stock} de stock")            
+        bool: Retorna True se encontrar o item. """
+    try:
         booleanValue=True
+        if itens.stock<= itens.stockMinimo:
+            itens.stockEstaMinimo=True
+            print(f"{itens.nome}, da prateleira{i+1} conta com {itens.stock} de stock")            
+    except Exception as e:
+        MostrarErro(e)
+    else:
         return booleanValue
-    
-def produtoComStockBaixo():
-    booleanValue=False
-    parametro="não e preciso"
-    print("produtos com stock baixo\n")
-    booleanValue=loopDeBusqueda(fuctionStockBaixo,parametro,booleanValue)
-    if not booleanValue:
-        print("nenhum produto encontrado")
 
+def produtoComStockBaixo():
+    try:
+        booleanValue=False
+        parametro="não e preciso"
+        print("produtos com stock baixo\n")
+        booleanValue=loopDeBusqueda(fuctionStockBaixo,parametro,booleanValue)
+    except Exception as e:
+        MostrarErro(e)
+    else:
+        if not booleanValue:
+            print("nenhum produto encontrado")
 
 
 def main():
@@ -147,10 +171,9 @@ def main():
                 case 4: produtoComStockBaixo()
                 case 5: break
             limparTela()
-        except ValueError:
-            print("erro no main")
+        except Exception as e:
+            MostrarErro(e)
             
-
 if __name__ == "__main__":
     main()
 

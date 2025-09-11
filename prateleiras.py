@@ -1,4 +1,5 @@
 from datetime import datetime
+from errorCode import MostrarErro
 class iten:
     """
     Esta classe e a responsavel da criação dos itens.
@@ -38,59 +39,81 @@ class iten:
         while True:
             try:
                 id=int(input("digite o id do produto\n"))
+                
+            except Exception as e:
+                MostrarErro(e)
+
+            else:
                 if id in iten.idsUsados:
                     print("id invalido\n")
                 else:
                     iten.idsUsados.append(id)
+                    print("Id cadastrado con sucesso ")
                     return id
-            except ValueError:
-                print("valor invalido, digite um numero inteiro\n")
+
     
     def criarNome():
         while True:
             try:
-                nome=str(input("digite o nome do produto\n"))
+                nome=str(input("digite o nome do produto\n")) 
+
+            except Exception as e:
+                MostrarErro(e)
+
+            else:
                 if nome in iten.nomesUsados:
                     print("nome invalido\n")
                 else:
                     iten.nomesUsados.append(nome)
+                    print("nome cadastrtado com sucesso ")
                     return nome
-            except ValueError:
-                print("valor invalido, digite um  nome valido\n")
     
     def criarStock():
         while True:
             try:
                 stock=int(input("digite o stock\n"))
+                
+            except Exception as e :
+                MostrarErro(e)
+
+            else:
                 if stock<0:
                     print("stock invalido\n")
-                else: return stock
-            except ValueError:
-                print("valor invalido, digite um numero inteiro\n")
+                else: 
+                    print("stock criado com sucesso")
+                    return stock
     
     def criarUnidadeMedida():
         while True:
             try:
                 print(iten.unidadesMedidas)
                 undMedida=int(input("escolha uma das opçoes\n"))
+    
+            except Exception as e:
+                MostrarErro(e)
+            
+            else:
                 if undMedida < 0 or undMedida > len(iten.unidadesMedidas):
                     print("opçao invalida\n")
                 else:
+                    print("Unidade de medida cadastrada com sucesso")
                     return iten.unidadesMedidas[undMedida-1]
-            except ValueError:
-                print("valor invalido, digite um numero inteiro\n")
-    
+
     def criarStockMinimo():
         while True:
             try:
                 stockMinimo=int(input("digite o stock minimo do produto\n"))
-                return stockMinimo
-            except ValueError:
-                print("valor invalido digite um numero inteiro\n")
-            
-                
-            
-    
+
+            except Exception as e:
+                MostrarErro(e)
+
+            else:
+                if stockMinimo < 0:
+                    print("stock minimo invalido")
+                else:
+                    print("stock minimo cadastrado com sucesso")
+                    return stockMinimo
+                       
     def criarvalidade():
         ano=iten.validarAno()
         mes=iten.validarMes()
@@ -119,34 +142,49 @@ class iten:
             try:
                 ano=int(input('digite o ano de vencimento\n'))
                 agora=datetime.now().year
+
+            except Exception as e:
+                MostrarErro(e)
+            
+            else:
                 if ano >= agora:
+                    print("Ano cadastrado com sucesso")
                     return ano
                 else:
                     print("data invalida")
-            except ValueError:
-                print("valor invalido, digite um numero inteiro\n")
-    
+
+
     def validarMes():
         while True:
             try:
                 mes=int(input('digite o mes de vencimento em numero\n'))
+                
+            except Exception as e:
+                MostrarErro(e)
+            
+            else:
                 if mes>12 or mes<1:
                     print('opcao invalida\n')
                 else:
+                    print("mes cadastrado com sucesso")
                     return mes
-            except ValueError:
-                print("valor invalido, digite um numero inteiro\n")
+        
     
     def validarDia(mes,ano):
         while True:
             try:
                 dia=int(input('digite o dia de vencimento\n'))
+                
+            except Exception as e:
+                MostrarErro(e)
+
+            else:
                 if(dia>iten.diasMes[mes]):
                     print('opçao invalida\n')
                 else:
+                    print("dia cadastrado com sucesso")
                     return dia
-            except ValueError:
-                print("valor invalido, digite um numero inteiro")
+            
     
     def ModificarMesSiAnoForBisiestro(ano,mes):
         anoBisiestro=iten.verificarAnoBisiestroEmesFevereiroNaoUsar(ano,mes)
@@ -177,10 +215,3 @@ class prateleira:
 
     def criarPrateleira(self):
         return self.reparticoes
-           
-
-
-
-
-
-    
