@@ -5,6 +5,9 @@ from dateutil.relativedelta import relativedelta
 from typing import Any , Callable
 from errorCode import MostrarErro
 from programingClean import limparTela
+import flet 
+
+page= flet
 
 quantidadeDePrateleiras=5
 

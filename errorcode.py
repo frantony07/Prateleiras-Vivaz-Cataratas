@@ -11,7 +11,7 @@ def MostrarErro(e):
         if isinstance(e , erroDetetado):
             print(msg)
             break
-        else:
-            print(f"erro inesperado {e}")
+    else:
+        print(f"erro inesperado {e}")
         
     
