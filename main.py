@@ -1,13 +1,11 @@
-from prateleiras import prateleira
-from prateleiras import iten
+from library.prateleiras import prateleira
+from library.prateleiras import iten
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from typing import Any , Callable
-from errorCode import MostrarErro
-from programingClean import limparTela
-import flet 
+from erro.errorCode import MostrarErro
+from library.programingClean import limparTela
 
-page= flet
 
 quantidadeDePrateleiras=5
 

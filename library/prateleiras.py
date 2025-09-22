@@ -1,5 +1,5 @@
 from datetime import datetime
-from errorCode import MostrarErro
+from erro.errorCode import MostrarErro
 class iten:
     """
     Esta classe e a responsavel da criação dos itens.
