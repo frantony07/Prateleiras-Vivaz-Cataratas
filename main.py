@@ -4,7 +4,8 @@ from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from typing import Any , Callable
 from erro.errorCode import MostrarErro
-from library.programingClean import limparTela
+from library.programingClean import limparTela , pause
+import os
 
 
 quantidadeDePrateleiras=5
@@ -14,8 +15,8 @@ almoxarifado= [prateleira() for _ in range(quantidadeDePrateleiras)]
 
 def loopDeBusqueda(fuction:Callable,produtoBuscado:Any,booleanValue:bool):
     """
-    este loop e responsavel por percorrer todas as prateleiras do almoxarifado na buscaqueda de algum item ou dado.
-    Retornara True se encontar o item ou o dado
+    este loop e responsavel por percorrer todas as prateleiras do almoxarifado na buscaqueda de algum item .
+    Retornara True se encontar o item 
     Args:
         function (fuction): Função usada para aplicar a busca em cada item.
         produtoBuscado (Any): Nome ou identificador do produto a ser buscado.
@@ -42,6 +43,7 @@ def buscarProdutos():
 
         if not booleanValue:
             print("Produto não encontrado")
+            pause()
 
         
 
@@ -61,6 +63,7 @@ def funçãoDeBusqueda(itens:object, produtoBuscado:Any, booleanValue:bool, i:in
 
     """
     if produtoBuscado in itens.nome:
+        
         print(f"Produto {produtoBuscado} achado na prateleira {i+1}")
         boleanValue = True
     return boleanValue
@@ -71,6 +74,7 @@ def adicionarProduto():
     prateleira=selecionarPrateleira()
     almoxarifado[prateleira].itensNaPrateleira.append(itens)
     print("produto cadastrado com sucesso!\n")
+    pause()
 
 def selecionarPrateleira():
     while True:
@@ -88,13 +92,14 @@ def produtosProximos_a_Vencer():
         vencimentoCurto=agora + relativedelta(month=3)
         booleanValue=False
         print("Produtos proximos a vencer\n")
-        booleanValue=loopDeBusqueda(fuctionVencimento,vencimentoCurto,booleanValue)       
+        booleanValue=loopDeBusqueda(fuctionVencimento,vencimentoCurto,booleanValue)   
     except Exception as e:
         MostrarErro(e)
     
     else:
         if not booleanValue:
             print("nenhum produto proximo a vencer encontrado\n")
+            pause()
 
 def fuctionVencimento(itens:object, produtoBuscado:Any, booleanValue:bool, i:int, j:int):
     """
@@ -147,11 +152,13 @@ def produtoComStockBaixo():
         parametro="não e preciso"
         print("produtos com stock baixo\n")
         booleanValue=loopDeBusqueda(fuctionStockBaixo,parametro,booleanValue)
+        pause()
     except Exception as e:
         MostrarErro(e)
     else:
         if not booleanValue:
             print("nenhum produto encontrado")
+            pause()
 
 
 def main():
@@ -171,6 +178,10 @@ def main():
                 case 3: produtosProximos_a_Vencer()
                 case 4: produtoComStockBaixo()
                 case 5: break
+                case _:
+                    print('opçao invalida')
+                    pause()
+                
             limparTela()
         except Exception as e:
             MostrarErro(e)

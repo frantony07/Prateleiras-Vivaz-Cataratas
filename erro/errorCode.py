@@ -1,3 +1,4 @@
+from library.programingClean import pause , limparTela
 def MostrarErro(e):
     mensagemDeErro={
         ValueError:"erro na digitação de algum numero",
@@ -10,6 +11,7 @@ def MostrarErro(e):
     for erroDetetado , msg in mensagemDeErro.items():
         if isinstance(e , erroDetetado):
             print(msg)
+            limparTela()
             break
     else:
         print(f"erro inesperado {e}")

@@ -178,7 +178,7 @@ class iten:
             except Exception as e:
                 MostrarErro(e)
 
-            else:
+            else: 
                 if(dia>iten.diasMes[mes]):
                     print('opçao invalida\n')
                 else:
